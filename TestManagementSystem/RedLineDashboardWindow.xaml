@@ -1,0 +1,159 @@
+<Window x:Class="TestManagementSystem.RedLineDashboardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="RedLine Tracking Dashboard" Height="700" Width="1300"
+        WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+
+        <BooleanToVisibilityConverter x:Key="InverseBooleanConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+
+        <Color x:Key="BackgroundPrimaryColor">#1E1E1E</Color>
+        <Color x:Key="BackgroundSecondaryColor">#2D2D30</Color>
+        <Color x:Key="AccentColor">#4CAF50</Color>
+        <Color x:Key="ForegroundColor">#F0F0F0</Color>
+        <Color x:Key="ForegroundSecondaryColor">#AAAAAA</Color>
+        <Color x:Key="RedLineColor">#FF9800</Color>
+
+        <SolidColorBrush x:Key="BackgroundPrimaryBrush" Color="{StaticResource BackgroundPrimaryColor}"/>
+        <SolidColorBrush x:Key="BackgroundSecondaryBrush" Color="{StaticResource BackgroundSecondaryColor}"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}"/>
+        <SolidColorBrush x:Key="ForegroundBrush" Color="{StaticResource ForegroundColor}"/>
+        <SolidColorBrush x:Key="ForegroundSecondaryBrush" Color="{StaticResource ForegroundSecondaryColor}"/>
+        <SolidColorBrush x:Key="RedLineBrush" Color="{StaticResource RedLineColor}"/>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="{StaticResource BackgroundPrimaryBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+            <Setter Property="RowBackground" Value="{StaticResource BackgroundPrimaryBrush}"/>
+            <Setter Property="AlternatingRowBackground" Value="{StaticResource BackgroundSecondaryBrush}"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{StaticResource BackgroundSecondaryBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource RedLineBrush}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="ResolveButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+
+            <Style.Triggers>
+            <DataTrigger Binding="{Binding IsResolved}" Value="True">
+                <Setter Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+            </Style.Triggers>
+            
+        </Style>
+
+        
+    </Window.Resources>
+
+    <Grid Background="{StaticResource BackgroundPrimaryBrush}" Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="RedLine Tracking Dashboard" 
+                   FontSize="28" FontWeight="Bold" Foreground="{StaticResource RedLineBrush}" Margin="0,0,0,15"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
+            <TextBlock Text="Status:" VerticalAlignment="Center" Foreground="{StaticResource ForegroundSecondaryBrush}" Margin="0,0,5,0"/>
+            <ComboBox x:Name="StatusFilterComboBox" SelectedIndex="0" Width="120" Margin="0,0,15,0" SelectionChanged="HandleFilterChange">
+                <ComboBoxItem Content="All" Foreground="Black"/>
+                <ComboBoxItem Content="Open" Foreground="Black"/>
+                <ComboBoxItem Content="Resolved" Foreground="Black"/>
+            </ComboBox>
+
+            <TextBlock Text="Test #:" VerticalAlignment="Center" Foreground="{StaticResource ForegroundSecondaryBrush}" Margin="0,0,5,0"/>
+            <TextBox x:Name="TestNumberFilterTextBox" Width="80" Margin="0,0,15,0" TextChanged="HandleFilterChange" Foreground="Black"/>
+
+            <TextBlock Text="Date Range (Open After):" VerticalAlignment="Center" Foreground="{StaticResource ForegroundSecondaryBrush}" Margin="0,0,5,0"/>
+            <DatePicker x:Name="StartDateFilterPicker" Width="120" SelectedDateFormat="Short" SelectedDateChanged="HandleFilterChange"/>
+
+            <TextBlock Text="Date Range (Open Before):" VerticalAlignment="Center" Foreground="{StaticResource ForegroundSecondaryBrush}" Margin="15,0,5,0"/>
+            <DatePicker x:Name="EndDateFilterPicker" Width="120" SelectedDateFormat="Short" SelectedDateChanged="HandleFilterChange"/>
+
+            <Button Content="Clear Filters" Margin="20,0,0,0" Click="ClearFiltersClick"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="2" x:Name="RedLinesDataGrid" ItemsSource="{Binding}" VerticalScrollBarVisibility="Auto">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="RL #" Binding="{Binding RedLineNumber}" Width="50"/>
+                <DataGridTextColumn Header="Test #" Binding="{Binding TestNumber, StringFormat=T-{0:D3}}" Width="60"/>
+                <DataGridTextColumn Header="Test Title" Binding="{Binding TestTitle}" Width="1.5*"/>
+                <DataGridTextColumn Header="Document" Binding="{Binding Document}" Width="*"/>
+                <DataGridTextColumn Header="Page #" Binding="{Binding PageNumber}" Width="70"/>
+                <DataGridTextColumn Header="Section" Binding="{Binding Section}" Width="*"/>
+                <DataGridTextColumn Header="Date Opened" Binding="{Binding DateOpened, StringFormat={}{0:yyyy-MM-dd}}" Width="*"/>
+                <DataGridTextColumn Header="Date Resolved" Binding="{Binding DateClosed}" Width="*"/>
+
+                <DataGridTemplateColumn Header="Comments" Width="2*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding Comments}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Text}" TextWrapping="Wrap" FontSize="11"
+                                                   Foreground="{StaticResource ForegroundSecondaryBrush}" Margin="0,0,0,2"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Action" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <!-- Button only visible if the RedLine is NOT resolved -->
+                            <Button Content="Resolve" 
+                                    Style="{StaticResource ResolveButtonStyle}"
+                                    Tag="{Binding TestNumber}"
+                                    IsEnabled="{Binding IsResolved, Converter={StaticResource InverseBooleanConverter}}"
+                                    Click="ResolveButton_Click"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                
+
+                         
+                
+                <DataGridTemplateColumn Header="Action" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Resolve" 
+                                    Style="{StaticResource ResolveButtonStyle}"
+                                    Tag="{Binding TestLineNumber}"
+                                    Click="ResolveButton_Click"
+                                    
+                                    Visibility="{Binding IsResolved, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn> 
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+       
+
+    </Grid>
+</Window>

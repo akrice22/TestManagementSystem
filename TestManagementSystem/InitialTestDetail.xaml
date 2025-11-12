@@ -1,0 +1,130 @@
+<Window x:Class="TestManagementSystem.InitialTestDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="Start New Test - Initial Details" Height="850" Width="500"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+
+
+    <Window.Resources>
+        <Color x:Key="BackgroundPrimaryColor">#1E1E1E</Color>
+
+        <Color x:Key="BackgroundSecondaryColor">#2D2D30</Color>
+        <Color x:Key="AccentColor">#4CAF50</Color>
+        <Color x:Key="ForegroundColor">#F0F0F0</Color>
+        <Color x:Key="ForegroundSecondaryColor">#AAAAAA</Color>
+        <SolidColorBrush x:Key="BackgroundPrimaryBrush" Color="{StaticResource BackgroundPrimaryColor}"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}"/>
+        <SolidColorBrush x:Key="ForegroundBrush" Color="{StaticResource ForegroundColor}"/>
+        <SolidColorBrush x:Key="ForegroundSecondaryBrush" Color="{StaticResource ForegroundSecondaryColor}"/>
+
+        <Style TargetType="TextBlock" x:Key="LabelStyle">
+            <Setter Property="Foreground" Value="{StaticResource ForegroundSecondaryBrush}"/>
+
+            <Setter Property="Margin" Value="0,10,0,5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <Style TargetType="{x:Type Control}">
+            <Setter Property="Background" Value="{StaticResource BackgroundPrimaryBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BackgroundPrimaryBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="{StaticResource BackgroundPrimaryBrush}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20,0">
+
+                <TextBlock Text="Initial Test Details" 
+                    FontSize="20" FontWeight="Bold" Foreground="{StaticResource ForegroundBrush}" Margin="10,0,0,10"/>
+
+                <TextBlock Style="{StaticResource LabelStyle}" Text="Test Number:"/>
+                <TextBlock x:Name="TestNumberTextBlock" Text="T-000" FontSize="16" FontWeight="Bold" Foreground="{StaticResource AccentBrush}" Margin="10,0,0,15"/>
+
+                <TextBlock Style="{StaticResource LabelStyle}" Text="Test Title: *" Margin="5,0,0,3"/>
+                <TextBox x:Name="TestTitleTextBox" Height="30" Margin="5,0,0,18"/>
+
+                <TextBlock Style="{StaticResource LabelStyle}" Text="Load Number:" Margin="5,0,0,3"/>
+                <TextBox x:Name="LoadNumberTextBox" Height="30" Margin="5,0,0,18"/>
+
+                <TextBlock Style="{StaticResource LabelStyle}" Text="System:" Margin="5,0,0,3"/>
+                <TextBox x:Name="SystemTextBox" Height="30" Margin="5,0,0,18"/>
+
+
+                <TextBlock Style="{StaticResource LabelStyle}" Text="Test Type: *" Margin="5,0,0,5"/>
+                <ComboBox x:Name="TestTypeComboBox" Height="30" SelectedIndex="0" Margin="5,0,0,3">
+                    <ComboBoxItem Content="DR Recheck"/>
+                    <ComboBoxItem Content="V&amp;V"/>
+                    <ComboBoxItem Content="Accreditation"/>
+
+                    <ComboBoxItem Content="Upgrade"/>
+                    <ComboBoxItem Content="Government"/>
+                    <ComboBoxItem Content="SPA/CEVT"/>
+                </ComboBox>
+
+                <TextBlock Style="{StaticResource LabelStyle}" Text="Gov/Contractor: *" Margin="5,0,0,5"/>
+                <ComboBox x:Name="TestTypeDetailComboBox" Height="30" SelectedIndex="0" Margin="5,0,0,18">
+                    <ComboBoxItem Content="Contractor"/>
+                    <ComboBoxItem Content="Government"/>
+                </ComboBox>
+
+                <Grid Margin="5,2,0,0">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Style="{StaticResource LabelStyle}" Text="Date Start: *"/>
+                        <DatePicker x:Name="DateStartPicker" SelectedDate="{x:Static System:DateTime.Now}" SelectedDateFormat="Short"/>
+
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Style="{StaticResource LabelStyle}" Text="Date End:"/>
+                        <DatePicker x:Name="DateEndPicker" SelectedDateFormat="Short"/>
+                    </StackPanel>
+
+                </Grid>
+
+                <TextBlock Style="{StaticResource LabelStyle}" Text="Description: *" Margin="5,12,0,8"/>
+                <TextBox x:Name="DescriptionTextBox" Height="80" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Margin="5,0,0,3"/>
+
+                <TextBlock Style="{StaticResource LabelStyle}" Text="Devices to be Tested: * (Select one or more)"/>
+
+                <StackPanel Margin="0,5,0,15">
+                    <CheckBox x:Name="OFT1CheckBox" Content="OFT 1" Foreground="{StaticResource ForegroundBrush}" Margin="5,2"/>
+                    <CheckBox x:Name="OFT2CheckBox" Content="OFT 2" Foreground="{StaticResource ForegroundBrush}" Margin="5,2"/>
+                    <CheckBox x:Name="OFT3CheckBox" Content="OFT 3" Foreground="{StaticResource ForegroundBrush}" Margin="5,2"/>
+                    <CheckBox 
+                        x:Name="OFT4CheckBox" Content="OFT 4" Foreground="{StaticResource ForegroundBrush}" Margin="5,2"/>
+                    <CheckBox x:Name="OFT5CheckBox" Content="OFT 5" Foreground="{StaticResource ForegroundBrush}" Margin="5,2"/>
+                </StackPanel>
+
+                <Button Content="Save &amp; Go to Test Details" 
+                        x:Name="SaveButton"
+                        Background="{StaticResource AccentBrush}" 
+                        Foreground="{StaticResource ForegroundBrush}" 
+                    
+                        FontWeight="Bold"
+                        Margin="0,20,0,0"
+                        Height="40"
+                        Width="200"
+                        Click="SaveButton_Click"/>
+            </StackPanel>
+        </ScrollViewer>
+
+    </Border>
+</Window>
